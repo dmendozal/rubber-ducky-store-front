@@ -60,7 +60,6 @@ export class AddComponent implements OnInit {
     }
 
     if (this.ducky?.id){
-      //update
       this.duckyService.updateDucky(this.ducky.id, ducky.price, ducky.quantity)
         .subscribe({
           next: ducky => {
@@ -69,8 +68,6 @@ export class AddComponent implements OnInit {
           }
         })
     }else{
-      //create
-      ducky.id = 0;
       this.duckyService.addDucky(ducky).subscribe({
         next: ducky => {
           this.router.navigate(['list']);
