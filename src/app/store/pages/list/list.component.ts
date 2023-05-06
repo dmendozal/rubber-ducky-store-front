@@ -41,18 +41,23 @@ export class ListComponent implements OnInit {
       (result) => {
         if (result) {
           this.duckyService.deleteDucky(id)
-            .subscribe(resp => {
-              this.getDuckies();
-              this.showSnackBar('Registro eliminado');
-            });
+            .subscribe({
+              next: value => {
+                this.getDuckies();
+                this.showSnackBar('Registro eliminado');
+              },
+              error: err => {
+                this.showSnackBar("Ocurrió un error inesperado, por favor comunicarse con el administrador.", "ERROR!");
+              }
+            })
         }
       }
     );
 
   }
 
-  showSnackBar(message: string): void {
-    this.snackBar.open(message, 'ok!', {
+  showSnackBar(message: string, action: string = 'ok!'): void {
+    this.snackBar.open(message, action, {
       duration: 2000
     });
   }
@@ -64,7 +69,7 @@ export class ListComponent implements OnInit {
           this.dataSource = duckies;
         },
         error: err => {
-          console.log("error al obtener los patitos");
+          this.showSnackBar("Ocurrió un error inesperado, por favor comunicarse con el administrador.", "ERROR!");
         }
       })
   }

@@ -70,11 +70,14 @@ export class AddComponent implements OnInit {
           next: ducky => {
             this.router.navigate(['list']);
             this.showSnackBar("Registro actualizado");
+          },
+          error: err => {
+            this.showSnackBar("Ocurrió un error inesperado, por favor comunicarse con el administrador.", "ERROR!");
           }
         })
     } else {
-      if(!ducky.color || !ducky.price || !ducky.quantity || !ducky.size ||
-          ducky.price <= 0 || ducky.quantity <= 0){
+      if (!ducky.color || !ducky.price || !ducky.quantity || !ducky.size ||
+        ducky.price <= 0 || ducky.quantity <= 0) {
         this.showSnackBar("Por favor rellenar los datos requeridos", "error!");
         return;
       }
@@ -82,6 +85,9 @@ export class AddComponent implements OnInit {
         next: ducky => {
           this.router.navigate(['list']);
           this.showSnackBar("Registro creado");
+        },
+        error: err => {
+          this.showSnackBar("Ocurrió un error inesperado, por favor comunicarse con el administrador.", "ERROR!");
         }
       })
     }
