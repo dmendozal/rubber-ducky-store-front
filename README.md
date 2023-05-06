@@ -25,3 +25,22 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Steps to run the application
+
+Before starting this series of steps we must have the RubbyDuckyStore backend working.
+#Step 1
+
+Clone the repository
+
+#Step 2
+
+Run the "npm install" command inside the root of the previously cloned repository root.
+
+#Step 3
+
+Run the project with the "ng-serve" command
+
+#Step 4
+
+Go to the path http://{host}:{port}/store/list to view the rubber ducky store
