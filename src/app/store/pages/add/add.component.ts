@@ -17,10 +17,10 @@ export class AddComponent implements OnInit {
   ducky!: Ducky;
   duckyForm = this.formBuilder.group({
     id: '',
-    color: '',
-    size: '',
-    quantity: '',
-    price: ''
+    color: ['', Validators.required],
+    size: ['', Validators.required],
+    quantity: ['', Validators.required],
+    price: ['', Validators.required]
   });
 
   constructor(private formBuilder: FormBuilder,
@@ -31,7 +31,7 @@ export class AddComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.router.url.includes('edit')){
+    if (!this.router.url.includes('edit')) {
       return;
     }
 
@@ -40,7 +40,7 @@ export class AddComponent implements OnInit {
     ).subscribe(ducky => {
       this.ducky = ducky;
       this.duckyForm.controls['id'].setValue(String(ducky.id));
-      this.duckyForm.controls['color'].setValue( DictionaryHelper.toSpanishColor(ducky.color));
+      this.duckyForm.controls['color'].setValue(DictionaryHelper.toSpanishColor(ducky.color));
       this.duckyForm.controls['size'].setValue(String(ducky.size));
       this.duckyForm.controls['quantity'].setValue(String(ducky.quantity));
       this.duckyForm.controls['price'].setValue(String(ducky.price));
@@ -53,13 +53,18 @@ export class AddComponent implements OnInit {
     }
 
     const ducky: Ducky = {
-      color : this.duckyForm.controls['color'].value as Color,
-      size : String(this.duckyForm.controls['size'].value),
-      price : Number(this.duckyForm.value.price),
+      color: this.duckyForm.controls['color'].value as Color,
+      size: String(this.duckyForm.controls['size'].value),
+      price: Number(this.duckyForm.value.price),
       quantity: Number(this.duckyForm.controls['quantity'].value)
     }
 
-    if (this.ducky?.id){
+    if (this.ducky?.id) {
+      if (!ducky.price || !ducky.quantity) {
+        this.showSnackBar("Por favor rellenar los datos requeridos [precio y cantidad]", "error!");
+        return;
+      }
+
       this.duckyService.updateDucky(this.ducky.id, ducky.price, ducky.quantity)
         .subscribe({
           next: ducky => {
@@ -67,7 +72,12 @@ export class AddComponent implements OnInit {
             this.showSnackBar("Registro actualizado");
           }
         })
-    }else{
+    } else {
+      if(!ducky.color || !ducky.price || !ducky.quantity || !ducky.size ||
+          ducky.price <= 0 || ducky.quantity <= 0){
+        this.showSnackBar("Por favor rellenar los datos requeridos", "error!");
+        return;
+      }
       this.duckyService.addDucky(ducky).subscribe({
         next: ducky => {
           this.router.navigate(['list']);
@@ -77,8 +87,8 @@ export class AddComponent implements OnInit {
     }
   }
 
-  showSnackBar(message: string): void {
-    this.snackBar.open(message, 'ok!', {
+  showSnackBar(message: string, action: string = 'ok!'): void {
+    this.snackBar.open(message, action, {
       duration: 2000
     });
   }
